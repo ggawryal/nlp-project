@@ -4,6 +4,7 @@ from typing import List
 from similarity import WordSimilarityScorer, CosineSimilarityScorer
 from embedding import UnknownWordException, word2vec
 
+
 class Game:
     UNKNOWN_WORD = -1
     GUESSED = -2
@@ -19,12 +20,12 @@ class Game:
         if guess == self.secret_word:
             self.ended = True
             return Game.GUESSED
-        
+
         try:
             return self.scorer.score(self.secret_word, guess)
         except UnknownWordException:
             return Game.UNKNOWN_WORD
-    
+
     def has_not_ended(self):
         return not self.ended
 
