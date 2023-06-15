@@ -32,7 +32,6 @@ class Game:
         return len(self.guesses)
 
 
-
 def play():
     embedding = word2vec.Word2VecEmbedding()
     scorer = CosineSimilarityScorer(embedding)
@@ -54,7 +53,6 @@ def play():
         else:
             print(f"Your word is {result*100:.2f}% similar to the secret word. Try again!")
 
-    
 
 if __name__ == "__main__":
     play()
