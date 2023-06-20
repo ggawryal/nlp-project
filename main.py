@@ -45,6 +45,12 @@ def play():
     while game.has_not_ended():
         print("Guess the secret word!")
         guess = input("> ")
+        if guess == "/hint":
+            print(f"The secret word starts with {game.secret_word[0]}")
+            continue
+        if guess == "/cheat":
+            print(f"The secret word is {game.secret_word}")
+            continue
         result = game.turn(guess)
         if result == Game.UNKNOWN_WORD:
             print(f"I don't know word `{guess}`. Try again!")
