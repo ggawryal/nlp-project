@@ -4,6 +4,9 @@ from typing import List
 from similarity import WordSimilarityScorer, CosineSimilarityScorer
 from embedding import UnknownWordException, word2vec
 
+import logging
+logging.basicConfig(filename='nlp-app.log', level=logging.DEBUG)
+
 
 class Game:
     UNKNOWN_WORD = -1
