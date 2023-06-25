@@ -1,11 +1,12 @@
 import random
 from typing import List
-
+import logging
 from similarity import WordSimilarityScorer, CosineSimilarityScorer
 from embedding import UnknownWordException, word2vec
+import nltk
 
-import logging
-logging.basicConfig(filename='nlp-app.log', level=logging.DEBUG)
+nltk.download('averaged_perceptron_tagger')
+logging.basicConfig(filename='nlp-app.log', format='[%(asctime)s] %(levelname)s:%(message)s', level=logging.DEBUG)
 
 
 class Game:
@@ -36,14 +37,34 @@ class Game:
         return len(self.guesses)
 
 
+def is_noun(word):
+    if word != word.lower() or not word.isalpha():
+        return False
+    tagged_word = nltk.pos_tag([word])
+    return tagged_word[0][1] in {'NN', 'NNP'}
+
+
+def create_secret_word_dictionary(dictionary):
+    res = []
+    for word in dictionary:
+        if is_noun(word):
+            res.append(word)
+        if len(res) >= 5000:
+            break
+
+    logging.info(f'Secret word dictionary created with {len(res)} words')
+    return res
+
+
 def play():
     embedding = word2vec.Word2VecEmbedding()
+    secret_word_dictionary = create_secret_word_dictionary(embedding.get_dictionary())
     scorer = CosineSimilarityScorer(embedding)
-
+    print(secret_word_dictionary)
     print("Welcome to the word guessing game!")
     print("Randomly choosing a secret word...")
 
-    game = Game(embedding.get_dictionary(), scorer)
+    game = Game(secret_word_dictionary, scorer)
 
     while game.has_not_ended():
         print("Guess the secret word!")
