@@ -5,8 +5,8 @@ from similarity import WordSimilarityScorer, CosineSimilarityScorer
 from embedding import UnknownWordException, word2vec
 import nltk
 
-nltk.download('averaged_perceptron_tagger')
 logging.basicConfig(filename='nlp-app.log', format='[%(asctime)s] %(levelname)s:%(message)s', level=logging.DEBUG)
+nltk.download('averaged_perceptron_tagger', quiet=True)
 
 
 class Game:
@@ -16,6 +16,9 @@ class Game:
     def __init__(self, dictionary: List[str], scorer: WordSimilarityScorer):
         self.scorer = scorer
         self.secret_word = random.choice(dictionary)
+
+        self.score_scaling_up_limit = scorer.score(self.secret_word, self.secret_word)
+
         self.ended = False
         self.guesses = []
 
@@ -26,7 +29,7 @@ class Game:
             return Game.GUESSED
 
         try:
-            return self.scorer.score(self.secret_word, guess)
+            return self.scorer.score(self.secret_word, guess) / self.score_scaling_up_limit
         except UnknownWordException:
             return Game.UNKNOWN_WORD
 
@@ -38,7 +41,7 @@ class Game:
 
 
 def is_noun(word):
-    if word != word.lower() or not word.isalpha():
+    if word != word.lower() or not word.isalpha() or len(word) < 3:
         return False
     tagged_word = nltk.pos_tag([word])
     return tagged_word[0][1] in {'NN', 'NNP'}
@@ -49,7 +52,7 @@ def create_secret_word_dictionary(dictionary):
     for word in dictionary:
         if is_noun(word):
             res.append(word)
-        if len(res) >= 5000:
+        if len(res) >= 2000:
             break
 
     logging.info(f'Secret word dictionary created with {len(res)} words')
@@ -60,7 +63,6 @@ def play():
     embedding = word2vec.Word2VecEmbedding()
     secret_word_dictionary = create_secret_word_dictionary(embedding.get_dictionary())
     scorer = CosineSimilarityScorer(embedding)
-    print(secret_word_dictionary)
     print("Welcome to the word guessing game!")
     print("Randomly choosing a secret word...")
 
