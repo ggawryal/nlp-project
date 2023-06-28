@@ -11,3 +11,6 @@ class WordEmbedding:
 
     def embed(self, word: str):
         raise NotImplementedError()
+    
+    def get_most_similar(self, word, topn):
+        raise NotImplementedError()
