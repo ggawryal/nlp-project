@@ -1,8 +1,8 @@
 import random
 from typing import List
 import logging
-from similarity import WordSimilarityScorer, CosineSimilarityScorer
-from embedding import UnknownWordException, word2vec
+from similarity import WordSimilarityScorer, GensimNativeSimilarityScorer
+from embedding import UnknownWordException, word2vec, fasttext
 import nltk
 
 logging.basicConfig(filename='nlp-app.log', format='[%(asctime)s] %(levelname)s:%(message)s', level=logging.DEBUG)
@@ -78,10 +78,11 @@ def ordinal_suffix(n):
 
 
 def play():
-    embedding = word2vec.Word2VecEmbedding()
+    # embedding = word2vec.Word2VecEmbedding()
+    embedding = fasttext.FasttextEmbedding()
 
     secret_word_dictionary = create_secret_word_dictionary(embedding.get_dictionary())
-    scorer = CosineSimilarityScorer(embedding)
+    scorer = GensimNativeSimilarityScorer(embedding)
 
     print("Welcome to the word guessing game!")
     print("Randomly choosing a secret word...")

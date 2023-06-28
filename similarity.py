@@ -21,3 +21,10 @@ class CosineSimilarityScorer(WordSimilarityScorer):
                 raise UnknownWordException(f"Unknown word: {word}")
 
         return sum(a * b for a, b in zip(self.embedding.embed(first), self.embedding.embed(second)))
+
+class GensimNativeSimilarityScorer(WordSimilarityScorer):
+    def score(self, first: str, second: str) -> float:
+        for word in [first, second]:
+            if word not in self.embedding.get_dictionary():
+                raise UnknownWordException(f"Unknown word: {word}")
+        return self.embedding.model.similarity(first, second)
