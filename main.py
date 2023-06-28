@@ -4,6 +4,8 @@ import logging
 from similarity import WordSimilarityScorer, GensimNativeSimilarityScorer
 from embedding import UnknownWordException, word2vec, fasttext
 import nltk
+from colorama import Fore, init as colorama_init, Style
+colorama_init()
 
 logging.basicConfig(filename='nlp-app.log', format='[%(asctime)s] %(levelname)s:%(message)s', level=logging.DEBUG)
 nltk.download('averaged_perceptron_tagger', quiet=True)
@@ -111,10 +113,10 @@ def play():
             rank = game.get_rank_in_top_1k_words(guess)
             rank_info = ""
             if rank is not None:
-                rank_info = f" ({rank}{ordinal_suffix(rank)} most similar)" if rank is not None else ""
+                rank_info = " ("+Fore.YELLOW+f"{rank}{ordinal_suffix(rank)}"+Style.RESET_ALL+" most similar)" if rank is not None else ""
 
             best_so_far = max(best_so_far, (-10**9 if rank is None else -rank, result, guess))
-            print(f"Your word is {result*100:.2f}% similar to the secret word{rank_info}. Best so far: {best_so_far[2]}. Try again!")
+            print("Your word is "+Fore.RED+f"{result*100:.2f}%"+Style.RESET_ALL+f" similar to the secret word{rank_info}. Best so far: {best_so_far[2]}. Try again!")
 
 
 if __name__ == "__main__":
