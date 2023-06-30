@@ -8,6 +8,8 @@ from gensim.models import KeyedVectors
 
 class GensimEmbedding(WordEmbedding):
     def __init__(self, model_name):
+        if not os.path.exists('data'):
+            os.makedirs('data')
         model_path = os.path.join('data', model_name + '.model')
         if not Path(model_path).exists():
             logging.info(f'{model_name} model not found in {model_path} directory, dowloading it')
