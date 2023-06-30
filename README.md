@@ -1,10 +1,16 @@
-# nlp-project
+# Word Guessing Game
 
-# research log
+## Description
+This is a simple word guessing game. 
+A word is chosen at random and the player has to guess it.
 
-## 20.06.2023
-Reached MVP stage of the project. 
+## Installation
 
-Notable issues:
-- choosing from all available words is not feasible - it's possible for the game to pick i.e. names written in Arabic.
-Possible solutions include picking the most popular words from given
+Use pipenv sync to install all packages specified in Pipfile.lock.
+```bash
+pipenv sync
+```
+
+Then run the main.py file.
+
+Good luck!
