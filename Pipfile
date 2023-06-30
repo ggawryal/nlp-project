@@ -6,7 +6,8 @@ name = "pypi"
 [packages]
 gensim = "*"
 nltk = "*"
-colorama= "*"
+colorama = "*"
+numpy = "1.24"
 
 [dev-packages]
 black = "*"
